@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float playerSpeed = 10.0f;
+    private Rigidbody playerRB;
+    private float playerSpeed = 9.0f;
     private float moveX, moveZ = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerRB = GetComponent<Rigidbody>();
         
     }
 
