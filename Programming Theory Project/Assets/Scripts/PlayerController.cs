@@ -6,8 +6,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRB;
-    private float playerSpeed = 9.0f;
-    private float moveX, moveZ = 0.0f;
+    private float playerSpeed = 10.0f;
+    private float xMove = 0.0f;
+    private float zMove = 0.0f;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -17,17 +19,31 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         PlayerMovement();
+        playerRB.velocity = Vector3.ClampMagnitude(playerRB.velocity, playerSpeed);
     }
+
 
     private void PlayerMovement()
     {
-        moveX = Input.GetAxis("Horizontal");
-        moveZ = Input.GetAxis("Vertical");
+        xMove = Input.GetAxisRaw("Horizontal") * playerSpeed * Time.deltaTime;
+        zMove = Input.GetAxisRaw("Vertical") * playerSpeed * Time.deltaTime;
 
-        transform.Translate(Vector3.right * moveX * playerSpeed * Time.deltaTime);
-        transform.Translate(Vector3.forward * moveZ * playerSpeed * Time.deltaTime);
+        
+        playerRB.AddForce(xMove, 0, zMove, ForceMode.Impulse);
+
+        if (xMove == 0.0f)
+        {
+            playerRB.velocity = new Vector3(0, 0, playerRB.velocity.z);
+        }
+        
+        if (zMove == 0.0f)
+        {
+            playerRB.velocity = new Vector3(playerRB.velocity.x, 0, 0);
+        }
+
+        
     }
 }
